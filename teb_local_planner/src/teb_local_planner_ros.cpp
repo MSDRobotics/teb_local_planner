@@ -78,11 +78,6 @@ TebLocalPlannerROS::~TebLocalPlannerROS()
 {
 }
 
-//void TebLocalPlannerROS::reconfigureCB(TebLocalPlannerReconfigureConfig& config, uint32_t level)
-//{
-//  cfg_->reconfigure(config);
-//}
-
 void TebLocalPlannerROS::initialize(nav2_util::LifecycleNode::SharedPtr node)
 {
   // check if the plugin is already initialized
