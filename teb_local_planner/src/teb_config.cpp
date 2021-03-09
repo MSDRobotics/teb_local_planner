@@ -323,12 +323,16 @@ void TebConfig::on_parameter_event_callback(
       // Robot
       else if (name == node_name + ".max_vel_x") {
         robot.max_vel_x = value.double_value;
+        robot.base_max_vel_x = value.double_value;
       } else if (name == node_name + ".max_vel_x_backwards") {
         robot.max_vel_x_backwards = value.double_value;
+        robot.base_max_vel_x_backwards = value.double_value;
       } else if (name == node_name + ".max_vel_y") {
         robot.max_vel_y = value.double_value;
+        robot.base_max_vel_y = value.double_value;
       } else if (name == node_name + ".max_vel_theta") {
         robot.max_vel_theta = value.double_value;
+        robot.base_max_vel_theta = value.double_value;
       } else if (name == node_name + ".acc_lim_x") {
         robot.acc_lim_x = value.double_value;
       } else if (name == node_name + ".acc_lim_y") {
