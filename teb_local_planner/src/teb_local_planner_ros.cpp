@@ -429,10 +429,13 @@ geometry_msgs::msg::TwistStamped TebLocalPlannerROS::computeVelocityCommands(con
       std::string("TebLocalPlannerROS: velocity command invalid. Resetting planner...")
     );
   }
+  RCLCPP_INFO_STREAM(logger_, "getVelocityCommand x: " << cmd_vel.twist.linear.x << " z: " << cmd_vel.twist.angular.z);
   
   // Saturate velocity, if the optimization results violates the constraints (could be possible due to soft constraints).
   saturateVelocity(cmd_vel.twist.linear.x, cmd_vel.twist.linear.y, cmd_vel.twist.angular.z, cfg_->robot.max_vel_x, cfg_->robot.max_vel_y,
                    cfg_->robot.max_vel_theta, cfg_->robot.max_vel_x_backwards);
+
+  RCLCPP_INFO_STREAM(logger_, "After saturation x: " << cmd_vel.twist.linear.x << " z: " << cmd_vel.twist.angular.z);
 
   // convert rot-vel to steering angle if desired (carlike robot).
   // The min_turning_radius is allowed to be slighly smaller since it is a soft-constraint
