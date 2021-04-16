@@ -286,6 +286,7 @@ geometry_msgs::msg::TwistStamped TebLocalPlannerROS::computeVelocityCommands(con
   
   // Get robot velocity
   robot_vel_ = velocity;
+  RCLCPP_INFO_STREAM(logger_, "robot_vel_ x: " << robot_vel_.linear.x << " z: " << robot_vel_.angular.z);
   
   // prune global plan to cut off parts of the past (spatially before the robot)
   pruneGlobalPlan(robot_pose, global_plan_, cfg_->trajectory.global_plan_prune_distance);
@@ -374,6 +375,7 @@ geometry_msgs::msg::TwistStamped TebLocalPlannerROS::computeVelocityCommands(con
       std::string("teb_local_planner was not able to obtain a local plan for the current setting.")
     );
   }
+  RCLCPP_INFO_STREAM(logger_, "AFTER plan robot_vel_ x: " << robot_vel_.linear.x << " z: " << robot_vel_.angular.z);
 
   // Check for divergence
   if (planner_->hasDiverged())
@@ -435,7 +437,7 @@ geometry_msgs::msg::TwistStamped TebLocalPlannerROS::computeVelocityCommands(con
   saturateVelocity(cmd_vel.twist.linear.x, cmd_vel.twist.linear.y, cmd_vel.twist.angular.z, cfg_->robot.max_vel_x, cfg_->robot.max_vel_y,
                    cfg_->robot.max_vel_theta, cfg_->robot.max_vel_x_backwards);
 
-  RCLCPP_INFO_STREAM(logger_, "After saturation x: " << cmd_vel.twist.linear.x << " z: " << cmd_vel.twist.angular.z);
+  //RCLCPP_INFO_STREAM(logger_, "After saturation x: " << cmd_vel.twist.linear.x << " z: " << cmd_vel.twist.angular.z);
 
   // convert rot-vel to steering angle if desired (carlike robot).
   // The min_turning_radius is allowed to be slighly smaller since it is a soft-constraint
