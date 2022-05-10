@@ -89,6 +89,12 @@ void TebLocalPlannerROS::initialize(nav2_util::LifecycleNode::SharedPtr node)
     intra_proc_node_.reset( 
             new rclcpp::Node("costmap_converter", node->get_namespace(), 
               rclcpp::NodeOptions()));
+
+    // Add callback for dynamic parameters
+    dyn_params_handler = node->add_on_set_parameters_callback(
+      std::bind(&TebConfig::dynamicParametersCallback, std::ref(cfg_), std::placeholders::_1));
+
+    // Declare params after dyn param callback to avoid race condition
     cfg_->declareParameters(node, name_);
 
     // get parameters of TebConfig via the nodehandle and override the default config
@@ -145,16 +151,11 @@ void TebLocalPlannerROS::initialize(nav2_util::LifecycleNode::SharedPtr node)
     }
     else {
       RCLCPP_INFO(logger_, "No costmap conversion plugin specified. All occupied costmap cells are treaten as point obstacles.");
-    }
-  
+    }  
     
     // Get footprint of the robot and minimum and maximum distance from the center of the robot to its footprint vertices.
     footprint_spec_ = costmap_ros_->getRobotFootprint();
     nav2_costmap_2d::calculateMinAndMaxDistances(footprint_spec_, robot_inscribed_radius_, robot_circumscribed_radius);
-
-    // Add callback for dynamic parameters
-    dyn_params_handler = node->add_on_set_parameters_callback(
-      std::bind(&TebConfig::dynamicParametersCallback, std::ref(cfg_), std::placeholders::_1));
 
     // validate optimization footprint and costmap footprint
     validateFootprints(cfg_->robot_model->getInscribedRadius(), robot_inscribed_radius_, cfg_->obstacles.min_obstacle_dist);
