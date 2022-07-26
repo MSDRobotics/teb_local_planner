@@ -70,7 +70,7 @@ TimedElasticBand::TimedElasticBand()
 
 TimedElasticBand::~TimedElasticBand()
 {
-  RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Destructor Timed_Elastic_Band...");
+  RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Destructor Timed_Elastic_Band...");
   clearTimedElasticBand();
 }
 
