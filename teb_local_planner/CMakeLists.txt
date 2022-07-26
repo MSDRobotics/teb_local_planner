@@ -13,6 +13,8 @@ endif()
 #  add_compile_options(-Wall -Wextra -Wpedantic)
 #endif()
 
+add_compile_options(-g)
+
 ## Find catkin macros and libraries
 find_package(ament_cmake REQUIRED)
 find_package(costmap_converter REQUIRED)
