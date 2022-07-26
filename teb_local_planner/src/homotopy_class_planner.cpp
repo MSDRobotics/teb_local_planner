@@ -176,7 +176,7 @@ void HomotopyClassPlanner::visualize()
       }
     }
   }
-  else RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Ignoring HomotopyClassPlanner::visualize() call, since no visualization class was instantiated before.");
+  else RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Ignoring HomotopyClassPlanner::visualize() call, since no visualization class was instantiated before.");
 }
 
 
@@ -454,7 +454,7 @@ void HomotopyClassPlanner::updateAllTEBs(const PoseSE2* start, const PoseSE2* go
       && ((goal->position() - tebs_.front()->teb().BackPose().position()).norm() >= cfg_->trajectory.force_reinit_new_goal_dist
         || fabs(g2o::normalize_theta(goal->theta() - tebs_.front()->teb().BackPose().theta())) >= cfg_->trajectory.force_reinit_new_goal_angular))
   {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "New goal: distance to existing goal is higher than the specified threshold. Reinitalizing trajectories.");
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "New goal: distance to existing goal is higher than the specified threshold. Reinitalizing trajectories.");
       tebs_.clear();
       equivalence_classes_.clear();
   }
@@ -514,7 +514,7 @@ TebOptimalPlannerPtr HomotopyClassPlanner::getInitialPlanTEB()
         else
         {
             initial_plan_teb_.reset(); // reset pointer for next call
-            RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "initial teb not found, trying to find a match according to the cached equivalence class");
+            RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "initial teb not found, trying to find a match according to the cached equivalence class");
         }
     }
 
@@ -543,7 +543,7 @@ TebOptimalPlannerPtr HomotopyClassPlanner::getInitialPlanTEB()
                           "HomotopyClassPlanner::getInitialPlanTEB(): number of equivalence classes (%lu) and number of trajectories (%lu) does not match.", equivalence_classes_.size(), tebs_.size());
     }
     else
-        RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "HomotopyClassPlanner::getInitialPlanTEB(): initial TEB not found in the set of available trajectories.");
+        RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "HomotopyClassPlanner::getInitialPlanTEB(): initial TEB not found in the set of available trajectories.");
 
     return TebOptimalPlannerPtr();
 }
@@ -631,7 +631,7 @@ TebOptimalPlannerPtr HomotopyClassPlanner::selectBestTeb()
   // in case we haven't found any teb due to some previous checks, investigate list again
 //   if (!best_teb_ && !tebs_.empty())
 //   {
-//       RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "all " << tebs_.size() << " tebs rejected previously");
+//       RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "all " << tebs_.size() << " tebs rejected previously");
 //       if (tebs_.size()==1)
 //         best_teb_ = tebs_.front();
 //       else // if multiple TEBs are available:
@@ -667,7 +667,7 @@ TebOptimalPlannerPtr HomotopyClassPlanner::selectBestTeb()
       }
       else
       {
-        RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+        RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                      "HomotopyClassPlanner::selectBestTeb(): Switching equivalence classes blocked (check parameter switching_blocking_period.");
         // block switching, so revert best_teb_
         best_teb_ = last_best_teb_;
@@ -797,14 +797,14 @@ void HomotopyClassPlanner::deletePlansDetouringBackwards(const double orient_thr
     }
     if((*it_teb)->teb().sizePoses() < 2)
     {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Discarding a plan with less than 2 poses");
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Discarding a plan with less than 2 poses");
       it_teb = removeTeb(*it_teb);
       continue;
     }
     double plan_orientation;
     if(!computeStartOrientation(*it_teb, len_orientation_vector, plan_orientation))
     {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Failed to compute the start orientation for one of the tebs, likely close to the target");
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Failed to compute the start orientation for one of the tebs, likely close to the target");
       it_teb = removeTeb(*it_teb);
       continue;
     }
@@ -815,13 +815,13 @@ void HomotopyClassPlanner::deletePlansDetouringBackwards(const double orient_thr
     }
     if(!it_teb->get()->isOptimized())
     {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Removing a teb because it's not optimized");
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Removing a teb because it's not optimized");
       it_teb = removeTeb(*it_teb);  // Deletes tebs that cannot be optimized (last optim call failed)
       continue;
     }
     if(it_teb->get()->teb().getSumOfAllTimeDiffs() / best_plan_duration > cfg_->hcp.max_ratio_detours_duration_best_duration)
     {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Removing a teb because it's duration is much longer than that of the best teb");
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Removing a teb because it's duration is much longer than that of the best teb");
       it_teb = removeTeb(*it_teb);
       continue;
     }

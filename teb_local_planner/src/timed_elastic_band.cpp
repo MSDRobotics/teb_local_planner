@@ -70,7 +70,7 @@ TimedElasticBand::TimedElasticBand()
 
 TimedElasticBand::~TimedElasticBand()
 {
-  RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "Destructor Timed_Elastic_Band...");
+  RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "Destructor Timed_Elastic_Band...");
   clearTimedElasticBand();
 }
 
@@ -140,7 +140,7 @@ void TimedElasticBand::addPoseAndTimeDiff(const Eigen::Ref<const Eigen::Vector2d
     addPose(position, theta,false);
     addTimeDiff(dt,false);
   } else {
-    RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+    RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                  "Method addPoseAndTimeDiff: Add one single Pose first. Timediff describes the time difference between last conf and given conf");
   }
   return;
@@ -241,7 +241,7 @@ void TimedElasticBand::autoResize(double dt_ref, double dt_hysteresis, int min_s
     {
       if(TimeDiff(i) > dt_ref + dt_hysteresis && sizeTimeDiffs()<max_samples)
       {
-        //RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "teb_local_planner: autoResize() inserting new bandpoint i=%u, #TimeDiffs=%lu",i,sizeTimeDiffs());
+        //RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "teb_local_planner: autoResize() inserting new bandpoint i=%u, #TimeDiffs=%lu",i,sizeTimeDiffs());
 
         double newtime = 0.5*TimeDiff(i);
 
@@ -253,7 +253,7 @@ void TimedElasticBand::autoResize(double dt_ref, double dt_hysteresis, int min_s
       }
       else if(TimeDiff(i) < dt_ref - dt_hysteresis && sizeTimeDiffs()>min_samples) // only remove samples if size is larger than min_samples.
       {
-        //RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"), "teb_local_planner: autoResize() deleting bandpoint i=%u, #TimeDiffs=%lu",i,sizeTimeDiffs());
+        //RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"), "teb_local_planner: autoResize() deleting bandpoint i=%u, #TimeDiffs=%lu",i,sizeTimeDiffs());
 
         if(i < ((int)sizeTimeDiffs()-1))
         {
@@ -351,7 +351,7 @@ bool TimedElasticBand::initTrajectoryToGoal(const PoseSE2& start, const PoseSE2&
     // if number of samples is not larger than min_samples, insert manually
     if ( sizePoses() < min_samples-1 )
     {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                    "initTEBtoGoal(): number of generated samples is less than specified by min_samples. Forcing the insertion of more samples...");
       while (sizePoses() < min_samples-1) // subtract goal point that will be added later
       {
@@ -419,7 +419,7 @@ bool TimedElasticBand::initTrajectoryToGoal(const std::vector<geometry_msgs::msg
     // if number of samples is not larger than min_samples, insert manually
     if ( sizePoses() < min_samples-1 )
     {
-      RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+      RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                    "initTEBtoGoal(): number of generated samples is less than specified by min_samples. Forcing the insertion of more samples...");
       while (sizePoses() < min_samples-1) // subtract goal point that will be added later
       {

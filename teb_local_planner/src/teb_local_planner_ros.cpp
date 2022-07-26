@@ -184,7 +184,7 @@ void TebLocalPlannerROS::initialize(nav2_util::LifecycleNode::SharedPtr node)
     // This should be called since to prevent different time sources exception
     time_last_infeasible_plan_ = clock_->now();
     time_last_oscillation_ = clock_->now();
-    RCLCPP_DEBUG(logger_, "teb_local_planner plugin initialized.");
+    RCLCPP_INFO(logger_, "teb_local_planner plugin initialized.");
   }
   else
   {
@@ -686,7 +686,7 @@ bool TebLocalPlannerROS::pruneGlobalPlan(const geometry_msgs::msg::PoseStamped& 
   }
   catch (const tf2::TransformException& ex)
   {
-    RCLCPP_DEBUG(logger_, "Cannot prune path since no transform is available: %s\n", ex.what());
+    RCLCPP_INFO(logger_, "Cannot prune path since no transform is available: %s\n", ex.what());
     return false;
   }
   return true;

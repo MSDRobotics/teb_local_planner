@@ -101,7 +101,7 @@ void lrKeyPointGraph::createGraph(const PoseSE2& start, const PoseSE2& goal, dou
 
   if (diff.norm()<cfg_->goal_tolerance.xy_goal_tolerance)
   {
-    RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+    RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                  "HomotopyClassPlanner::createProbRoadmapGraph(): xy-goal-tolerance already reached.");
     if (hcp_->getTrajectoryContainer().empty())
     {
@@ -182,7 +182,7 @@ void lrKeyPointGraph::createGraph(const PoseSE2& start, const PoseSE2& goal, dou
           // check angle
           if (start_orient_vec.dot(keypoint_dist) <= obstacle_heading_threshold)
           {
-            RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+            RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                          "createGraph() - deleted edge: limit_obstacle_heading");
             continue;
           }
@@ -231,7 +231,7 @@ void ProbRoadmapGraph::createGraph(const PoseSE2& start, const PoseSE2& goal, do
 
   if (start_goal_dist<cfg_->goal_tolerance.xy_goal_tolerance)
   {
-    RCLCPP_DEBUG(rclcpp::get_logger("teb_local_planner"),
+    RCLCPP_INFO(rclcpp::get_logger("teb_local_planner"),
                  "HomotopyClassPlanner::createProbRoadmapGraph(): xy-goal-tolerance already reached.");
     if (hcp_->getTrajectoryContainer().empty())
     {
